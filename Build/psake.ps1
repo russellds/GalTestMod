@@ -1,4 +1,5 @@
-﻿# PSake makes variables declared here available in other scriptblocks
+﻿Include ".\helpers\Get-NextNugetPackageCalendarVersion.ps1"
+# PSake makes variables declared here available in other scriptblocks
 # Init some things
 Properties {
     # Find the build folder based on build system
@@ -65,8 +66,9 @@ Task Build -Depends Test {
     # Bump the module version
     Try
     {
-        $Version = Get-NextPSGalleryVersion -Name $env:BHProjectName -ErrorAction Stop
+        $Version = Get-NextNugetPackageCalendarVersion -Name $env:BHProjectName -ErrorAction Stop
         Update-Metadata -Path $env:BHPSModuleManifest -PropertyName ModuleVersion -Value $Version -ErrorAction stop
+        "Version: $($version.ToString())"
     }
     Catch
     {
